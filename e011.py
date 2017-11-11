@@ -30,9 +30,28 @@ n = """08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"""
 
 
-def calc_quare(sq):
+def mul_list(li):
+    r1 = 1
+    for l in range(0, len(li)):
+        r1 *= int(li[l])
+    return r1
+
+
+def calc_quare(p_sq):
     # get list 4x4
-    pass
+    rl = 0
+    rc = 0
+    for k in range(0, 4):
+        rl = max(rl, mul_list(p_sq[k]))
+        rc = max(rc, mul_list([p_sq[0][k],
+                               p_sq[1][k],
+                               p_sq[2][k],
+                               p_sq[3][k]]
+                              ))
+    rd1 = mul_list([p_sq[0][0], p_sq[1][1], p_sq[2][2], p_sq[3][3]])
+    rd2 = mul_list([p_sq[0][3], p_sq[1][2], p_sq[2][1], p_sq[3][0]])
+
+    return max(rl, rc, rd1, rd2)
 
 
 # list of lines
@@ -41,6 +60,7 @@ n1 = n.splitlines()
 n2 = [x.split(' ') for x in n1]
 
 # lines cycle
+res = 0
 for i in range(0, len(n2) - 3):
     # columns cycle
     for j in range(0, len(n2[i]) - 3):
@@ -49,5 +69,7 @@ for i in range(0, len(n2) - 3):
               n2[i+1][j:j + 4],
               n2[i+2][j:j + 4],
               n2[i+3][j:j + 4]]
-        print(sq)
+        res = max(res, calc_quare(sq))
+
+print(res)
 
