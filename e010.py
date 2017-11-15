@@ -29,21 +29,20 @@ def get_prime_numbers(upper_bound):
 
 
 def get_prime_numbers2(upper_bound):
+    # https://ru.wikipedia.org/wiki/Решето_Эратосфена
     nums = [n for n in range(2, upper_bound)]
 
-    pn = 0
-    while nums[pn]**2 <= upper_bound:
-        if nums[pn] != 0:
-            # TODO: make another step
-            # pn - index of prime number
-            # print(nums[pn])
-            for i in range(pn + 1, upper_bound - 2):
-                if nums[i] % nums[pn] == 0:
-                    nums[i] = 0
+    n = 0
+    while nums[n]**2 <= upper_bound:
+        if nums[n] != 0:
+            # n - index of prime number
+            # pn - prime number
+            pn = nums[n]
+            for i in range(pn + n, upper_bound - 2, pn):
+                nums[i] = 0
 
-        pn += 1
+        n += 1
 
-    print(nums)
     return sum(nums)
 
 
@@ -52,7 +51,7 @@ def get_prime_numbers2(upper_bound):
 # print(get_prime_numbers(200000))
 # print("--- %s seconds ---" % (time.time() - st))
 
-# ~60 sec @ 2000000
+# ~0.5 sec @ 2000000
 st = time.time()
 print(get_prime_numbers2(2000000))
 print("--- %s seconds ---" % (time.time() - st))
