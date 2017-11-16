@@ -5,10 +5,11 @@
 """
     ProjectEuler Problem 18
 
-    NOT SOLVED
     Buggy algorithm - starting from top to bottom don't use maximum of adjacent numbers,
                       because their sum may be not max
 """
+
+# TODO: SOLVE
 
 __author__ = 'ilya_il'
 

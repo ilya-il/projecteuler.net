@@ -5,8 +5,9 @@
 """
     ProjectEuler Problem 5
 
-    NOT SOLVED
 """
+
+# TODO: SOLVE
 
 __author__ = 'ilya_il'
 
