@@ -11,19 +11,15 @@ __author__ = 'ilya_il'
 import time
 
 
-def get_shift(num):
-    # TODO: very slow function!!! see get_shift2 in e037 for the same upper_bound
+def get_shift2(num):
     shift_list = list()
     digit_list = list(str(num))
 
-    for i in range(0, len(digit_list)):
-        # digit_list = digit_list[1:] + digit_list[:1]
-        # shift_list.append(int(''.join(digit_list)))
-        #
-        # adding two lists with the same 'i' is very slow digit_list[i:] + digit_list[:i]
-        # or may be adding of lists() is very slow itself
-        #
-        shift_list.append(int(''.join(digit_list[i:] + digit_list[:i])))
+    for i in range(1, len(digit_list)):
+        # cut from left
+        shift_list.append(int(''.join(digit_list[i:])))
+        # cut from right
+        shift_list.append(int(''.join(digit_list[:-i])))
 
     return sorted(shift_list)
 
@@ -48,18 +44,22 @@ def get_prime_numbers2(upper_bound):
     nums = [x for x in nums if x != 0]
 
     # get shifts for prime numbers and check them for prime
-    res = 0
+    res = list()
     for i in range(0, len(nums)):
-        shift_list = get_shift(nums[i])
+        shift_list = get_shift2(nums[i])
         for j in range(len(shift_list)):
             # shift list is sorted, so we need to check prime numbers just till 'shift_list[j]'
             if shift_list[j] not in nums[:shift_list[j]]:
                 break
         else:
-            res += 1
+            if nums[i] not in [2, 3, 5, 7]:
+                res.append(nums[i])
+
     print(res)
+    print(sum(res))
 
 
+# print(get_shift(3797))
 # 1000000 @ 452 sec
 st = time.time()
 get_prime_numbers2(1000000)
