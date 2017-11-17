@@ -3,7 +3,7 @@
 # IL 30.10.2017
 
 """
-    ProjectEuler Problem 35
+    ProjectEuler Problem 37
 """
 
 __author__ = 'ilya_il'

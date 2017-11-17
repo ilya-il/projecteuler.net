@@ -3,7 +3,7 @@
 # IL 30.10.2017
 
 """
-    ProjectEuler Problem 5
+    ProjectEuler Problem 12
 
     triangle num - 76576500
     num pos - 12376
