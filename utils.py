@@ -15,6 +15,7 @@ def exec_time(fn):
     """Check function's time of execution"""
     def wrapper(*args):
         st = time.time()
-        fn(*args)
+        res = fn(*args)
         print("--- %s seconds ---" % (time.time() - st))
+        return res
     return wrapper
