@@ -8,7 +8,10 @@
 
 __author__ = 'ilya_il'
 
+from utils import exec_time
 
+
+@exec_time
 def get_prime_numbers2(upper_bound):
     # get prime numbers
     # https://ru.wikipedia.org/wiki/Решето_Эратосфена
@@ -31,7 +34,8 @@ def get_prime_numbers2(upper_bound):
     res_sum = 0
     res_count = 0
     for i in range(int(len(nums)/2) + 1):
-        for j in range(i + 1, int(len(nums)/2) + 1):
+        # i + n - sum window, should guess appropriate "n"
+        for j in range(i + 200, int(len(nums)/2) + 1):
             res = sum(nums[i:j])
 
             # sum must be less then upper_bound
@@ -46,4 +50,7 @@ def get_prime_numbers2(upper_bound):
     print('prime count, sum is - {count}, {sum}'.format(count=res_count, sum=res_sum))
 
 
+# 10000   - 65 items in sum
+# 100000  - 183 items in sum
+# 1000000 - more then 200 items in sum (543)
 get_prime_numbers2(1000000)
