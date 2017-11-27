@@ -29,3 +29,4 @@ for j in range(1, 28123):
         nums.append(j)
 
 print(nums)
+print(len(nums))
