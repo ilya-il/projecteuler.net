@@ -4,6 +4,8 @@
 
 """
     ProjectEuler Problem 26
+
+    really cool doc - http://kvant.mccme.ru/pdf/2000/02/kv0200semenova.pdf
 """
 
 __author__ = 'ilya_il'
