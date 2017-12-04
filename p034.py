@@ -9,10 +9,6 @@
 __author__ = 'ilya_il'
 
 
-# TODO: SOLVE strange problem - there are infinite amount of numbers
-#   1! + 4! + 5! = 145
-#   1! + 5! + 0!*24 = 15*10^24
-
 def get_fact(num):
     if num == 0:
         return 1
@@ -23,11 +19,22 @@ def get_fact(num):
 def calc_facts():
     fact_dict = dict()
 
-    # pass 1 - get factorials from 1 to 9
-    for i in range(1, 10):
-        fact_dict[i] = get_fact(i)
+    # pass 1 - get factorials from 0 to 9
+    for i in range(10):
+        fact_dict[str(i)] = get_fact(i)
 
     print(fact_dict)
+
+    res = 0
+    # pass 2 - brute all numbers to 10000000
+    for n in range(3, 1000000):
+        # find factorials in dict for each digit
+        s = sum([fact_dict[j] for j in str(n)])
+        if s == n:
+            res += n
+            print(n)
+
+    print(res)
 
 
 calc_facts()
