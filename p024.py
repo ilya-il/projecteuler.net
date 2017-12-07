@@ -46,6 +46,7 @@ def narayana_algorithm(input_str):
         a = y + x
 
         count += 1
+        # find 1000000 permutation
         if count == 1000000:
             print(''.join(a))
             break
