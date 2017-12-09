@@ -10,7 +10,6 @@ __author__ = 'ilya_il'
 
 import os
 
-# TODO: SOLVE
 
 """
     Hand value in a list
@@ -96,7 +95,8 @@ def test_hands():
 
 
 def check_royal_flush(hand):
-    """royal flush - from T to A in same suit
+    """
+    Royal flush - from T to A in same suit
 
     If both players have royal flush, no more card check
     """
@@ -112,7 +112,9 @@ def check_royal_flush(hand):
 
 
 def check_straight_flush(hand):
-    """straight flush - any consecutive values of same suit
+    """
+    Straight flush - any consecutive values of same suit
+
     If both players have straight flush check max card value
     """
     values = [card_values[x[0]] for x in hand]
@@ -128,7 +130,7 @@ def check_straight_flush(hand):
 
 def check_four(hand):
     """
-    four of a kind - four cards of the same value
+    Four of a kind - four cards of the same value
     1) sort values - [2, 2, 2, 2, 10] or [2, 10, 10, 10, 10]
     2) get [:4] - first four or [1:] - last four and check it
 
@@ -168,7 +170,8 @@ def check_full_house(hand):
 
 
 def check_flush(hand):
-    """All cards of the same suit
+    """
+    Flush - all cards of the same suit
 
     If both players have equal flush check values of cards"""
     values = sorted([card_values[x[0]] for x in hand])
@@ -183,7 +186,8 @@ def check_flush(hand):
 
 
 def check_straight(hand):
-    """All cards are consecutive values
+    """
+    Straight - all cards are consecutive values
 
     If both players have straight check max card value"""
     values = [card_values[x[0]] for x in hand]
@@ -197,7 +201,8 @@ def check_straight(hand):
 
 
 def check_three(hand):
-    """Three cards of the same value
+    """
+    Three of a kind - three cards of the same value
     1) sort values - [2, 2, 2, 8, 10], [2, 8, 8, 8, 10], [2, 3, 8, 8, 8]
     2) get slice and check it
 
@@ -218,7 +223,8 @@ def check_three(hand):
 
 
 def check_two_pairs(hand):
-    """Two different pairs
+    """
+    Two pairs - two different pairs
 
     1) sort values - [2, 2, 3, 3, 8], [2, 2, 3, 8, 8], [2, 3, 3, 8, 8]
     2) check slices
@@ -243,7 +249,8 @@ def check_two_pairs(hand):
 
 
 def check_pair(hand):
-    """Two cards of the same value
+    """
+    Pair - two cards of the same value
     1) sort values - [2, 2, 3, 4, 5], [2, 3, 3, 4, 5], [2, 3, 4, 4, 5], [2, 3, 4, 5, 5]
     2) check slices
 
@@ -266,7 +273,8 @@ def check_pair(hand):
 
 
 def check_high(hand):
-    """Highest value card"""
+    """
+    High card - highest value card"""
     values = sorted([card_values[x[0]] for x in hand])
 
     res = [1, values[4], 0, values[:4]]
@@ -275,8 +283,7 @@ def check_high(hand):
 
 
 def parse_hand(hand):
-    print(hand)
-
+    # check combination from high to low, if match - return parsed combination
     func = (check_royal_flush, check_straight_flush, check_four, check_full_house, check_flush, check_straight,
             check_three, check_two_pairs, check_pair, check_high)
     for f in func:
@@ -294,11 +301,39 @@ def compare_hands(h1, h2):
     :param h2: Player2 hand
     :return: 0 - equal hands, 1 - hand1 > hand2, -1 - hand1 < hand2
     """
-    return 0
+    # check combination
+    if h1[0] > h2[0]:
+        return 1
+    elif h1[0] < h2[0]:
+        return -1
+    else:
+        # equal combinations, need more check
+        # check first max card
+        if h1[1] > h2[1]:
+            return 1
+        elif h1[1] < h2[1]:
+            return -1
+        else:
+            # first max cards are equal, need more check
+            # check second max card
+            if h1[2] > h2[2]:
+                return 1
+            elif h1[2] < h2[2]:
+                return -1
+            else:
+                # second max cards are equal, need more check
+                # check rest of cards - compare sorted lists in reverse order
+                if sorted(h1[3])[::-1] > sorted(h2[3])[::-1]:
+                    return 1
+                elif sorted(h1[3])[::-1] < sorted(h2[3])[::-1]:
+                    return -1
+                else:
+                    # only one case of completely equal hands
+                    return 0
 
 
 def solve_problem():
-    ih = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'res\p054_poker.txt'))
+    ih = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.join('res', 'p054_poker.txt')))
     data = ih.readlines()
     ih.close()
 
@@ -315,13 +350,10 @@ def solve_problem():
         h1 = parse_hand(p1[i])
         h2 = parse_hand(p2[i])
 
-        print(h1)
-        print(h2)
-        break
-        # if compare_hands(p1[i], p2[i]) > 0:
-        #     res += 1
+        if compare_hands(h1, h2) > 0:
+            res += 1
 
     print(res)
 
 
-test_hands()
+solve_problem()
