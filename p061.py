@@ -8,101 +8,112 @@
 
 __author__ = 'ilya_il'
 
-
-def narayana_algorithm(input_iterable):
-    """ Narayana algorithm of permutations
-    https://ru.wikipedia.org/wiki/Алгоритм_Нарайаны
-    :param input_iterable: list (or string) - initial permutation
-    :return: list of all permutations
-    """
-    res = []
-
-    # sort initial to work properly
-    a = sorted(input_iterable)
-    b = list(a[::-1])
-    c = len(a)
-
-    # append COPY of a
-    res.append(a[:])
-
-    while a != b:
-        # step 1
-        j = -1
-        for i in range(c - 2, -1, -1):
-            if a[i + 1] > a[i]:
-                j = i
-                break
-
-        # step 2
-        k = -1
-        for i in range(c - 1, -1, -1):
-            if a[i] > a[j]:
-                k = i
-                break
-
-        # swap
-        a[j], a[k] = a[k], a[j]
-
-        # step 3
-        x = a[j+1:c][::-1]
-        y = a[0:j+1]
-        a = y + x
-
-        # append COPY of a
-        res.append(a[:])
-
-    return res
+from utils import exec_time
 
 
+@exec_time
 def solve_problem(upper_bound):
-    t = []
-    s = []
-    p = []
-    hx = []
-    hp = []
-    o = []
+    t1 = []
+    t2 = []
+    s1 = []
+    s2 = []
+    p1 = []
+    p2 = []
+    hx1 = []
+    hx2 = []
+    hp1 = []
+    hp2 = []
+    o1 = []
+    o2 = []
 
     # 8128, 2882, 8281 - example (triangle, pentagonal, square) - not ordered tri, pent, sq!!!
 
     for n in range(2, upper_bound):
-        t1 = str(int(n * (n + 1) / 2))
-        if len(t1) == 4:
-            t.append(t1)
-        s1 = str(n**2)
-        if len(s1) == 4:
-            s.append(s1)
-        p1 = str(int(n * (3 * n - 1) / 2))
-        if len(p1) == 4:
-            p.append(p1)
-        hx1 = str(n * (2 * n - 1))
-        if len(hx1) == 4:
-            hx.append(hx1)
-        hp1 = str(int(n * (5 * n - 3)/2))
-        if len(hp1) == 4:
-            hp.append(hp1)
-        o1 = str(n * (3 * n - 1))
-        if len(o1) == 4:
-            o.append(o1)
+        t = str(int(n * (n + 1) / 2))
+        if len(t) == 4 and t.find('0') == -1:
+            t1.append(t[:2])
+            t2.append(t[2:])
+        s = str(n**2)
+        if len(s) == 4 and s.find('0') == -1:
+            s1.append(s[:2])
+            s2.append(s[2:])
+        p = str(int(n * (3 * n - 1) / 2))
+        if len(p) == 4 and p.find('0') == -1:
+            p1.append(p[:2])
+            p2.append(p[2:])
+        hx = str(n * (2 * n - 1))
+        if len(hx) == 4 and hx.find('0') == -1:
+            hx1.append(hx[:2])
+            hx2.append(hx[2:])
+        hp = str(int(n * (5 * n - 3)/2))
+        if len(hp) == 4 and hp.find('0') == -1:
+            hp1.append(hp[:2])
+            hp2.append(hp[2:])
+        o = str(n * (3 * n - 1))
+        if len(o) == 4 and o.find('0') == -1:
+            o1.append(o[:2])
+            o2.append(o[2:])
 
-    t = ['8128', ]
-    s = ['8281', ]
-    p = ['2882', ]
+    for i in range(len(t1)):
+        print(t1[i] + t2[i])
+        for j in range(len(s1)):
+            for k in range(len(p1)):
+                for l in range(len(hx1)):
+                    for m in range(len(hp1)):
+                        for n in range(len(o1)):
+                            a1 = {t1[i], s1[j], p1[k], hx1[l], hp1[m], o1[n]}
+                            a2 = {t2[i], s2[j], p2[k], hx2[l], hp2[m], o2[n]}
+                            if a1 == a2:
+                                # print(n)
+                                if t1[i] != t2[i] and s1[j] != s2[j] and p1[k] != p2[k] and hx1[l] != hx2[l] and\
+                                        hp1[m] != hp2[m] and o1[n] != o2[n]:
+                                    print('Magic - {t}, {s}, {p}, {hx}, {hp}, {o}'.format(t=t1[i]+t2[i], s=s1[j]+s2[j],
+                                                                                          p=p1[k]+p2[k], hx=hx1[l]+hx2[l],
+                                                                                          hp=hp1[m]+hp2[m], o=o1[n]+o2[n]))
+                                break
 
-    for t1 in t:
-        for s1 in s:
-            for p1 in p:
-                perm = narayana_algorithm([t1, s1, p1])
-                # check all combinations of t1, s1, p1
-                for pm in perm:
-                    # check each combination
-                    if pm[0][2:] == pm[1][:2] and pm[1][2:] == pm[2][:2] and pm[2][2:] == pm[0][:2]:
-                        print('Magic - {t}, {s}, {p}'.format(t=t1, s=s1, p=p1))
 
-    print(t)
-    print(s)
-    print(p)
+@exec_time
+def solve_problem3(upper_bound):
+    t1 = []
+    t2 = []
+    s1 = []
+    s2 = []
+    p1 = []
+    p2 = []
+
+    # 8128, 2882, 8281 - example (triangle, pentagonal, square) - not ordered tri, pent, sq!!!
+
+    for n in range(2, upper_bound):
+        t = str(int(n * (n + 1) / 2))
+        if len(t) == 4 and t.find('0') == -1:
+            # print(t)
+            t1.append(t[:2])
+            t2.append(t[2:])
+        s = str(n**2)
+        if len(s) == 4 and t.find('0') == -1:
+            s1.append(s[:2])
+            s2.append(s[2:])
+        p = str(int(n * (3 * n - 1) / 2))
+        if len(p) == 4 and p.find('0') == -1:
+            p1.append(p[:2])
+            p2.append(p[2:])
+
+    for i in range(len(t1)):
+        t11 = t1[i]
+        t22 = t2[i]
+        for j in range(len(s1)):
+            s11 = s1[j]
+            s22 = s2[j]
+            for k in range(len(p1)):
+                n1 = {t11, s11, p1[k]}
+                n2 = {t22, s22, p2[k]}
+                # break
+                if n1 == n2:
+                    print(n1)
+                    print(n2)
+                    print('Magic - {t}, {s}, {p}'.format(t=t11+t22, s=s11+s22, p=p1[k]+p2[k]))
+                    break
 
 
-print(narayana_algorithm('123'))
-print(narayana_algorithm(['2882', '8128', '8281']))
-solve_problem(10000)
+solve_problem(200)
