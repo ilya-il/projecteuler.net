@@ -11,6 +11,111 @@ __author__ = 'ilya_il'
 from utils import exec_time
 
 
+def narayana_algorithm(input_iterable):
+    """ Narayana algorithm of permutations
+    https://ru.wikipedia.org/wiki/РђР»РіРѕСЂРёС‚Рј_РќР°СЂР°Р№Р°РЅС‹
+    :param input_iterable: list (or string) - initial permutation
+    :return: list of all permutations
+    """
+    res = []
+
+    # sort initial to work properly
+    a = sorted(input_iterable)
+    b = list(a[::-1])
+    c = len(a)
+
+    # append COPY of a
+    res.append(a[:])
+
+    while a != b:
+        # step 1
+        j = -1
+        for i in range(c - 2, -1, -1):
+            if a[i + 1] > a[i]:
+                j = i
+                break
+
+        # step 2
+        k = -1
+        for i in range(c - 1, -1, -1):
+            if a[i] > a[j]:
+                k = i
+                break
+
+        # swap
+        a[j], a[k] = a[k], a[j]
+
+        # step 3
+        x = a[j+1:c][::-1]
+        y = a[0:j+1]
+        a = y + x
+
+        # append COPY of a
+        res.append(a[:])
+
+    return res
+
+
+def check_cycle(nums):
+    print('Check cycle')
+    print(nums)
+    # get all permutations
+    perm = narayana_algorithm(nums)
+    for pm in perm:
+        # head to tail
+        if pm[0][:2] == pm[len(pm) - 1][2:]:
+            for i in range(len(pm) - 1):
+                if pm[i][2:] != pm[i+1][:2]:
+                    break
+            else:
+                print('Valid cycle')
+                print(pm)
+                return True
+
+    return False
+
+
+def check_set(set_numbers):
+    # check cycle
+    check_cycle(set_numbers)
+
+    t1 = []
+    s1 = []
+    p1 = []
+    hx1 = []
+    hp1 = []
+    o1 = []
+
+    # check numbers and ALL position in set
+    for n in range(1, 200):
+        t = str(int(n * (n + 1) / 2))
+        t1.append(t)
+        s = str(n**2)
+        s1.append(s)
+        p = str(int(n * (3 * n - 1) / 2))
+        p1.append(p)
+        hx = str(n * (2 * n - 1))
+        hx1.append(hx)
+        hp = str(int(n * (5 * n - 3)/2))
+        hp1.append(hp)
+        o = str(n * (3 * n - 1))
+        o1.append(o)
+
+    for n in set_numbers:
+        if n in t1:
+            print('Num {n} in T, position {p}'.format(n=n, p=t1.index(n)+1))
+        if n in s1:
+            print('Num {n} in S, position {p}'.format(n=n, p=s1.index(n)+1))
+        if n in p1:
+            print('Num {n} in P, position {p}'.format(n=n, p=p1.index(n)+1))
+        if n in hx1:
+            print('Num {n} in HX, position {p}'.format(n=n, p=hx1.index(n)+1))
+        if n in hp1:
+            print('Num {n} in HP, position {p}'.format(n=n, p=hp1.index(n)+1))
+        if n in o1:
+            print('Num {n} in O, position {p}'.format(n=n, p=o1.index(n)+1))
+
+
 @exec_time
 def solve_problem(upper_bound):
     t1 = []
@@ -28,29 +133,30 @@ def solve_problem(upper_bound):
 
     # 8128, 2882, 8281 - example (triangle, pentagonal, square) - not ordered tri, pent, sq!!!
 
-    for n in range(2, upper_bound):
+    for n in range(1, upper_bound):
         t = str(int(n * (n + 1) / 2))
-        if len(t) == 4 and t.find('0') == -1:
+        # start from 1431
+        if len(t) == 4 and t >= '1431':
             t1.append(t[:2])
             t2.append(t[2:])
         s = str(n**2)
-        if len(s) == 4 and s.find('0') == -1:
+        if len(s) == 4:
             s1.append(s[:2])
             s2.append(s[2:])
         p = str(int(n * (3 * n - 1) / 2))
-        if len(p) == 4 and p.find('0') == -1:
+        if len(p) == 4:
             p1.append(p[:2])
             p2.append(p[2:])
         hx = str(n * (2 * n - 1))
-        if len(hx) == 4 and hx.find('0') == -1:
+        if len(hx) == 4:
             hx1.append(hx[:2])
             hx2.append(hx[2:])
         hp = str(int(n * (5 * n - 3)/2))
-        if len(hp) == 4 and hp.find('0') == -1:
+        if len(hp) == 4:
             hp1.append(hp[:2])
             hp2.append(hp[2:])
         o = str(n * (3 * n - 1))
-        if len(o) == 4 and o.find('0') == -1:
+        if len(o) == 4:
             o1.append(o[:2])
             o2.append(o[2:])
 
@@ -63,13 +169,15 @@ def solve_problem(upper_bound):
                         for n in range(len(o1)):
                             a1 = {t1[i], s1[j], p1[k], hx1[l], hp1[m], o1[n]}
                             a2 = {t2[i], s2[j], p2[k], hx2[l], hp2[m], o2[n]}
+                            # 1) first condition - 6 pairs of 2-digit numbers
                             if a1 == a2:
-                                # print(n)
-                                if t1[i] != t2[i] and s1[j] != s2[j] and p1[k] != p2[k] and hx1[l] != hx2[l] and\
-                                        hp1[m] != hp2[m] and o1[n] != o2[n]:
-                                    print('Magic - {t}, {s}, {p}, {hx}, {hp}, {o}'.format(t=t1[i]+t2[i], s=s1[j]+s2[j],
-                                                                                          p=p1[k]+p2[k], hx=hx1[l]+hx2[l],
-                                                                                          hp=hp1[m]+hp2[m], o=o1[n]+o2[n]))
+                                # 2) second condition - check real cycle of all combinations
+                                if check_cycle([t1[i]+t2[i], s1[j]+s2[j], p1[k]+p2[k],
+                                                hx1[l]+hx2[l], hp1[m]+hp2[m], o1[n]+o2[n]]):
+                                    print('Magic - {t}, {s}, {p}, {hx}, {hp}, {o}'.
+                                          format(t=t1[i]+t2[i], s=s1[j]+s2[j],
+                                                 p=p1[k]+p2[k], hx=hx1[l]+hx2[l],
+                                                 hp=hp1[m]+hp2[m], o=o1[n]+o2[n]))
                                 break
 
 
@@ -84,18 +192,18 @@ def solve_problem3(upper_bound):
 
     # 8128, 2882, 8281 - example (triangle, pentagonal, square) - not ordered tri, pent, sq!!!
 
-    for n in range(2, upper_bound):
+    for n in range(1, upper_bound):
         t = str(int(n * (n + 1) / 2))
-        if len(t) == 4 and t.find('0') == -1:
+        if len(t) == 4:
             # print(t)
             t1.append(t[:2])
             t2.append(t[2:])
         s = str(n**2)
-        if len(s) == 4 and t.find('0') == -1:
+        if len(s) == 4:
             s1.append(s[:2])
             s2.append(s[2:])
         p = str(int(n * (3 * n - 1) / 2))
-        if len(p) == 4 and p.find('0') == -1:
+        if len(p) == 4:
             p1.append(p[:2])
             p2.append(p[2:])
 
@@ -110,10 +218,10 @@ def solve_problem3(upper_bound):
                 n2 = {t22, s22, p2[k]}
                 # break
                 if n1 == n2:
-                    print(n1)
-                    print(n2)
-                    print('Magic - {t}, {s}, {p}'.format(t=t11+t22, s=s11+s22, p=p1[k]+p2[k]))
+                    if check_cycle([t11+t22, s11+s22, p1[k]+p2[k]]):
+                        print('Magic - {t}, {s}, {p}'.format(t=t11+t22, s=s11+s22, p=p1[k]+p2[k]))
                     break
 
 
+# check_set(['1711', '2116', '1617', '1128', '5221', '2852'])
 solve_problem(200)
