@@ -58,7 +58,6 @@ def narayana_algorithm(input_iterable):
 
 def check_cycle(nums):
     print('Check cycle')
-    print(nums)
     # get all permutations
     perm = narayana_algorithm(nums)
     for pm in perm:
@@ -73,47 +72,6 @@ def check_cycle(nums):
                 return True
 
     return False
-
-
-def check_set(set_numbers):
-    # check cycle
-    check_cycle(set_numbers)
-
-    t1 = []
-    s1 = []
-    p1 = []
-    hx1 = []
-    hp1 = []
-    o1 = []
-
-    # check numbers and ALL position in set
-    for n in range(1, 200):
-        t = str(int(n * (n + 1) / 2))
-        t1.append(t)
-        s = str(n**2)
-        s1.append(s)
-        p = str(int(n * (3 * n - 1) / 2))
-        p1.append(p)
-        hx = str(n * (2 * n - 1))
-        hx1.append(hx)
-        hp = str(int(n * (5 * n - 3)/2))
-        hp1.append(hp)
-        o = str(n * (3 * n - 1))
-        o1.append(o)
-
-    for n in set_numbers:
-        if n in t1:
-            print('Num {n} in T, position {p}'.format(n=n, p=t1.index(n)+1))
-        if n in s1:
-            print('Num {n} in S, position {p}'.format(n=n, p=s1.index(n)+1))
-        if n in p1:
-            print('Num {n} in P, position {p}'.format(n=n, p=p1.index(n)+1))
-        if n in hx1:
-            print('Num {n} in HX, position {p}'.format(n=n, p=hx1.index(n)+1))
-        if n in hp1:
-            print('Num {n} in HP, position {p}'.format(n=n, p=hp1.index(n)+1))
-        if n in o1:
-            print('Num {n} in O, position {p}'.format(n=n, p=o1.index(n)+1))
 
 
 @exec_time
@@ -136,40 +94,56 @@ def solve_problem(upper_bound):
     for n in range(1, upper_bound):
         t = str(int(n * (n + 1) / 2))
         # start from 1431
-        if len(t) == 4 and t >= '1431':
+        if len(t) == 4 and t[2] != '0':
             t1.append(t[:2])
             t2.append(t[2:])
+
         s = str(n**2)
-        if len(s) == 4:
+        if len(s) == 4 and s[2] != '0':
             s1.append(s[:2])
             s2.append(s[2:])
         p = str(int(n * (3 * n - 1) / 2))
-        if len(p) == 4:
+
+        if len(p) == 4 and p[2] != '0':
             p1.append(p[:2])
             p2.append(p[2:])
+
         hx = str(n * (2 * n - 1))
-        if len(hx) == 4:
+        if len(hx) == 4 and hx[2] != '0':
             hx1.append(hx[:2])
             hx2.append(hx[2:])
+
         hp = str(int(n * (5 * n - 3)/2))
-        if len(hp) == 4:
+        if len(hp) == 4 and hp[2] != '0':
             hp1.append(hp[:2])
             hp2.append(hp[2:])
-        o = str(n * (3 * n - 1))
-        if len(o) == 4:
+
+        o = str(n * (3 * n - 2))
+        if len(o) == 4 and o[2] != '0':
             o1.append(o[:2])
             o2.append(o[2:])
 
     for i in range(len(t1)):
         print(t1[i] + t2[i])
+        t11 = t1[i]
+        t22 = t2[i]
         for j in range(len(s1)):
+            s11 = s1[j]
+            s22 = s2[j]
             for k in range(len(p1)):
+                p11 = p1[k]
+                p22 = p2[k]
                 for l in range(len(hx1)):
+                    hx11 = hx1[l]
+                    hx22 = hx2[l]
                     for m in range(len(hp1)):
+                        hp11 = hp1[m]
+                        hp22 = hp2[m]
                         for n in range(len(o1)):
-                            a1 = {t1[i], s1[j], p1[k], hx1[l], hp1[m], o1[n]}
-                            a2 = {t2[i], s2[j], p2[k], hx2[l], hp2[m], o2[n]}
-                            # 1) first condition - 6 pairs of 2-digit numbers
+                            pass
+                            a1 = {t11, s11, p11, hx11, hp11, o1[n]}
+                            a2 = {t22, s22, p22, hx22, hp22, o2[n]}
+                            # # 1) first condition - 6 pairs of 2-digit numbers
                             if a1 == a2:
                                 # 2) second condition - check real cycle of all combinations
                                 if check_cycle([t1[i]+t2[i], s1[j]+s2[j], p1[k]+p2[k],
@@ -223,5 +197,4 @@ def solve_problem3(upper_bound):
                     break
 
 
-# check_set(['1711', '2116', '1617', '1128', '5221', '2852'])
 solve_problem(200)
