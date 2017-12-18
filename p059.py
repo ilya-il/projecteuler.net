@@ -15,21 +15,18 @@ def decrypt(crypto_text, key):
     freq_dict = dict()
     open_text = []
     # letters
-    cl = [chr(x) for x in range(65, 91)]
     sl = [chr(x) for x in range(97, 123)]
 
     def xor(x, y):
         z = chr(x ^ y)
         # collect only letters
-        if z in cl or z in sl:
+        if z.lower() in sl:
             if z not in freq_dict.keys():
-                freq_dict[z] = 1
+                freq_dict[z.lower()] = 1
             else:
-                freq_dict[z] += 1
+                freq_dict[z.lower()] += 1
 
         return z
-        # else:
-        #    return -1
 
     clen = len(crypto_text)
     klen = len(key)
@@ -49,9 +46,13 @@ def decrypt(crypto_text, key):
 
     # https://en.wikipedia.org/wiki/Frequency_analysis
     letters = sorted(freq_dict, key=freq_dict.__getitem__, reverse=True)
-    if letters[0] in ['e', 'E'] and letters[1] in ['t', 'a', 'T', 'A']:
-        print('Second, third - {s}, {t}'.format(s=letters[1], t=letters[2]))
-        print(open_text[:30])
+    if ''.join(open_text).lower().find('the') != -1 and ''.join(open_text).lower().find('and') != -1 \
+            and letters[0] in ['e', 'a', 'o', 'i']:
+        print(''.join(open_text[:50]))
+
+        res = sum([ord(x) for x in open_text])
+        print(res)
+
         return True
     else:
         return False
@@ -72,7 +73,9 @@ def solve_problem():
     for k1 in key_items:
         print(chr(k1))
         for k2 in key_items:
+            # print(chr(k2))
             for k3 in key_items:
+                # print(chr(k3))
                 if decrypt(crypto_text, [k1, k2, k3]):
                     print('Match key - {k1}{k2}{k3}'.format(k1=chr(k1), k2=chr(k2), k3=chr(k3)))
 
